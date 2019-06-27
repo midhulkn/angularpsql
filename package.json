@@ -1,0 +1,11 @@
+{
+  "name": "tut",
+  "version": "1.0.0",
+  "description" : "",
+  "main": "index.js",
+  "scripts": {
+  	"dev":"lite-server"
+  },
+  "author": "midhul",
+  "license": "ISC"
+  }

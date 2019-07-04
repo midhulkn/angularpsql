@@ -1,4 +1,3 @@
-
 var app = angular.module('main', ['ngRoute']);
 
 app.config(function($routeProvider, $locationProvider) {
@@ -15,7 +14,12 @@ app.config(function($routeProvider, $locationProvider) {
 	}).when('/login', {
 		templateUrl: './components/login.html',
 		controller: 'loginCtrl'
-	}).when('/dashboard', {
+		
+	}).when('/register', {
+		templateUrl: './components/register.html',
+		controller: 'registerCtrl'
+	})
+	.when('/dashboard', {
 		resolve: {
 			check: function($location, user) {
 				if(!user.isUserLoggedIn()) {
@@ -81,7 +85,7 @@ app.controller('homeCtrl', function($scope, $location) {
 	$scope.goToLogin = function() {
 		$location.path('/login');
 	};
-	$scope.regiser = function() {
+	$scope.goToRegister = function() {
 		$location.path('/register');
 	}
 });
@@ -107,6 +111,28 @@ app.controller('loginCtrl', function($scope, $http, $location, user) {
 		})
 	}
 });
+app.controller('registerCtrl', function($scope, $http, $location, user) {
+	$scope.register = function() {
+		var username = $scope.username;
+		var password = $scope.password;
+		$http({
+			url: 'http://localhost:8000/register.php',
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/x-www-form-urlencoded'
+			},
+			data: 'username='+username+'&password='+password
+		}).then(function(response) {
+			if(response.data.status == 'loggedin') {
+				user.saveData(response.data);
+				$location.path('/dashboard');
+			} else {
+				alert('error in creation');
+			}
+		})
+	}
+});
+
 
 app.controller('dashboardCtrl', function($scope, user, $http) {
 	$scope.user = user.getName();
